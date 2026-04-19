@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { sidebarStyles } from "../assets/dummyStyles";
 import questionsData from "../assets/dummydata";
 import { toast } from "react-toastify";
-import axios from "axios";
+//import axios from "axios";
 import API from "../utils/api";
 import {
   Award,
@@ -32,7 +32,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
+//const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
 
 const Sidebar = ({ onExamStart, onExamEnd }) => {
   console.log("Sidebar component is rendering");
@@ -642,12 +642,16 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
         return;
       }
 
-      const response = await axios.post(`${API_BASE}/api/results`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // const response = await axios.post(`${API_BASE}/api/results`, payload, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Authorization: `Bearer ${token}`,
+      //   },
+      // });
+
+      // console.log("Server response:", response.data);
+
+      const response = await API.post("/api/results", payload);
 
       console.log("Server response:", response.data);
 
