@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+Fix for fixed navbar
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: white;
+}
+
+/* Sidebar should start below navbar on desktop */
+@media (min-width: 768px) {
+  .sidebar-wrapper {
+    margin-top: 0;
+  }
+
+  /* Ensure sidebar doesn't overlap navbar */
+  aside {
+    top: 0 !important;
+  }
+}
+
+/* Mobile fixes */
+@media (max-width: 767px) {
+  .sidebar-wrapper {
+    margin-top: 60px;
+  }
+}
+
+/* Hide all scrollbars by default */
+html,
+body {
+  overflow: hidden;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Fix for level selection page header */
+.sidebarHeader,
+.sidebar-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: linear-gradient(to right, #dbeafe, #e0e7ff) !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+  margin-top: 0 !important;
+  min-height: 120px !important;
+}
+/* Remove any top padding that might affect the sidebar */
+.sidebar-wrapper {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure sidebar has proper stacking context */
+aside {
+  top: 0 !important;
+}
+
+/* Only show scrollbar on sidebar content */
+.sidebar-scroll {
+  overflow-y: auto !important;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Main content scrolling without visible scrollbar */
+.main-content-scroll {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.main-content-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure main content scrolls properly */
+main {
+  overflow-y: auto;
+  height: 100vh;
+  scroll-behavior: smooth;
+}
+
+/* Remove padding from any container */
+.pb-150,
+[style*="padding-bottom: 150px"] {
+  padding-bottom: 0 !important;
+}
+
+/* Force sidebar to have same height on level selection page */
+.level-selection-page .sidebar-wrapper,
+.level-selection-page aside {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.level-selection-page .sidebar-content {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  min-height: 0 !important;
+}
+
+.level-selection-page .sidebar-footer {
+  flex-shrink: 0 !important;
+}
+
+/* Fix for level selection page specifically */
+.level-selection-wrapper {
+  margin-top: 40px !important;
+  padding-top: 20px !important;
+}
+
+/* Ensure sidebar header is visible */
+aside .sidebarHeader,
+aside .sidebar-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: linear-gradient(to right, #dbeafe, #e0e7ff) !important;
+}
+
+/* Fix main content area */
+.main-content-fix {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+/* Ensure content can scroll naturally */
+.welcomeContainer,
+.resultsContainer {
+  min-height: auto !important;
+  padding-bottom: 80px !important;
+}
+
+/* Let content determine height */
+.welcomeContent,
+.resultsContent {
+  margin: auto;
+}
+
+/* Remove extra scrollbar */
+.main-content-fix::-webkit-scrollbar {
+  width: 4px;
+}
+
+.main-content-fix::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.main-content-fix::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+/* Fix for technology selection page */
+body.technology-selected {
+  overflow: auto !important;
+}
+
+.technology-selected .sidebar-header {
+  position: sticky !important;
+  top: 60px !important;
+}
+
+.technology-selected .sidebar-header {
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Fix only for level selection page - add top padding to content */
+.level-selection-page .sidebar-content {
+  padding-top: 20px !important;
+}
+
+/* Ensure technologies header is visible on level selection page */
+.level-selection-page .technologiesHeader {
+  margin-top: 0 !important;
+  padding-top: 10px !important;
+  visibility: visible !important;
+  display: flex !important;
+}
+
+/* Fix for level selection page - ensure content starts at top */
+.level-selection-page .sidebar-content {
+  scroll-behavior: auto !important;
+}
+
+.level-selection-page .technologiesHeader {
+  margin-top: 0 !important;
+  padding-top: 10px !important;
+}
+
+/* Prevent page jump on button click */
+.techButton {
+  scroll-margin: 0 !important;
+  scroll-snap-align: none !important;
+}
+
+/* Force sidebar to start at top on refresh */
+.sidebar-content {
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+  overflow-anchor: none !important;
+}
+
+/* Prevent scroll position saving */
+.sidebar-content {
+  overflow-anchor: none;
+}
+
+/* Force levels to expand downward */
+.levelsContainer {
+  display: block !important;
+  transform: none !important;
+  animation: none !important;
+  transform-origin: top center !important;
+}
+
+/* Ensure smooth downward expansion */
+.levelsContainer {
+  transition: none !important;
+}
+
+/* Make sure parent doesn't constrain expansion */
+.techItem {
+  overflow: visible !important;
+}
+
+/* Force levels to expand downward */
+.levelsContainer {
+  transform: none !important;
+  transform-origin: top center !important;
+  position: relative !important;
+  top: auto !important;
+  bottom: auto !important;
+  margin-top: 12px !important;
+  margin-bottom: 0 !important;
+}
+
+.techItem {
+  overflow: visible !important;
+}
+
+.techButton {
+  position: relative;
+  z-index: 5;
+}
