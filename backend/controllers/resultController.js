@@ -1,3 +1,4 @@
+import Result from "../models/resultModel.js";
 export async function createResult(req, res) {
   try {
     console.log("=== CREATE RESULT CALLED ===");
