@@ -3,7 +3,7 @@ import { sidebarStyles } from "../assets/dummyStyles";
 import questionsData from "../assets/dummydata";
 import { toast } from "react-toastify";
 import axios from "axios";
-import App from "../utils/api";
+import API from "../utils/api";
 import {
   Award,
   BookOpen,
@@ -32,9 +32,6 @@ import {
   RotateCcw,
 } from "lucide-react";
 
-// const API_BASE = "http://localhost:9999";
-//const API_BASE = "https://quiz-application-five-azure.vercel.app/";
-// Add this at the top of Sidebar.jsx after imports
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
 
 const Sidebar = ({ onExamStart, onExamEnd }) => {

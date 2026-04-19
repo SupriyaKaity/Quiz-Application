@@ -1,3 +1,4 @@
+// Signup.jsx - Updated version
 import React, { useState } from "react";
 import { signupStyles } from "../assets/dummyStyles";
 import { useNavigate, Link } from "react-router-dom";
@@ -11,11 +12,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import App from "../utils/api";
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
-
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+import API from "../utils/api"; // Changed from 'App' to 'API'
 
 const Signup = ({ onSignupSuccess = null }) => {
   const navigate = useNavigate();
@@ -25,12 +22,12 @@ const Signup = ({ onSignupSuccess = null }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // EMAIL VALIDATION FUNCTION ALSO VALIDATING NAME EMAIL AND PASSWORD
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
   const validate = () => {
     const e = {};
     if (!name.trim()) e.name = "Name is required";
@@ -41,10 +38,6 @@ const Signup = ({ onSignupSuccess = null }) => {
       e.password = "Password must be at least 6 characters";
     return e;
   };
-
-  // const API_BASE = "http://localhost:9999";
-  //const API_BASE = "https://quiz-application-five-azure.vercel.app/";
-  // Add this at the top of Signup.jsx after imports
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
@@ -61,50 +54,149 @@ const Signup = ({ onSignupSuccess = null }) => {
         password,
       };
 
-      const resp = await fetch(`${API_BASE}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      let data = null;
+      // Using API utility instead of fetch
+      const response = await API.post("/api/auth/register", payload);
 
-      try {
-        data = await resp.json();
-      } catch (e) {
-        // ignore all the errors
-      }
-
-      if (!resp.ok) {
-        console.log("Backend error:", data);
-        const msg = data?.message || `Error ${resp.status}`;
-        setSubmitError(msg);
-        return;
-      }
-
-      if (data?.token) {
-        // Use authLogin instead of manual localStorage
-        authLogin(data.user, data.token);
+      if (response.data?.token) {
+        // Use authLogin from context
+        authLogin(response.data.user, response.data.token);
       }
 
       if (typeof onSignupSuccess === "function") {
-        try {
-          onSignupSuccess(
-            data.user || {
-              name: name.trim(),
-              email: email.trim().toLowerCase(),
-            },
-          );
-        } catch (err) {}
+        onSignupSuccess(
+          response.data.user || {
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+          }
+        );
       }
 
       navigate("/login", { replace: true });
     } catch (err) {
       console.error("Signup error:", err);
-      setSubmitError("Network Error");
+      const errorMessage = err.response?.data?.message || "Network Error. Please try again.";
+      setSubmitError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
+//   // Rest of your component remains the same...
+//   return (
+//     // ... your JSX remains unchanged
+//   );
+// };
+
+// export default Signup;
+
+
+// import React, { useState } from "react";
+// import { signupStyles } from "../assets/dummyStyles";
+// import { useNavigate, Link } from "react-router-dom";
+// import {
+//   CheckCircle,
+//   User,
+//   Mail,
+//   Lock,
+//   Eye,
+//   EyeOff,
+//   ArrowLeft,
+// } from "lucide-react";
+// import { useAuth } from "../context/AuthContext";
+// import App from "../utils/api";
+
+// const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
+
+// const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+// const Signup = ({ onSignupSuccess = null }) => {
+//   const navigate = useNavigate();
+//   const { login: authLogin } = useAuth();
+
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+
+//   const [errors, setErrors] = useState({});
+//   const [submitError, setSubmitError] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   // EMAIL VALIDATION FUNCTION ALSO VALIDATING NAME EMAIL AND PASSWORD
+//   const validate = () => {
+//     const e = {};
+//     if (!name.trim()) e.name = "Name is required";
+//     if (!email) e.email = "Email is required";
+//     else if (!isValidEmail(email)) e.email = "Please enter a valid email";
+//     if (!password) e.password = "Password is required";
+//     else if (password.length < 6)
+//       e.password = "Password must be at least 6 characters";
+//     return e;
+//   };
+
+//   // const API_BASE = "http://localhost:9999";
+//   //const API_BASE = "https://quiz-application-five-azure.vercel.app/";
+//   // Add this at the top of Signup.jsx after imports
+
+//   const handleSubmit = async (ev) => {
+//     ev.preventDefault();
+//     setSubmitError("");
+//     const v = validate();
+//     setErrors(v);
+//     if (Object.keys(v).length) return;
+//     setLoading(true);
+
+//     try {
+//       const payload = {
+//         name: name.trim(),
+//         email: email.trim().toLowerCase(),
+//         password,
+//       };
+
+//       const resp = await fetch(`${API_BASE}/api/auth/register`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+//       let data = null;
+
+//       try {
+//         data = await resp.json();
+//       } catch (e) {
+//         // ignore all the errors
+//       }
+
+//       if (!resp.ok) {
+//         console.log("Backend error:", data);
+//         const msg = data?.message || `Error ${resp.status}`;
+//         setSubmitError(msg);
+//         return;
+//       }
+
+//       if (data?.token) {
+//         // Use authLogin instead of manual localStorage
+//         authLogin(data.user, data.token);
+//       }
+
+//       if (typeof onSignupSuccess === "function") {
+//         try {
+//           onSignupSuccess(
+//             data.user || {
+//               name: name.trim(),
+//               email: email.trim().toLowerCase(),
+//             },
+//           );
+//         } catch (err) {}
+//       }
+
+//       navigate("/login", { replace: true });
+//     } catch (err) {
+//       console.error("Signup error:", err);
+//       setSubmitError("Network Error");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
   return (
     <div className={signupStyles.pageContainer}>

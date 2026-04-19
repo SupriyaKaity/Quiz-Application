@@ -1,14 +1,10 @@
+// Login.jsx - Updated version
 import React, { useState } from "react";
 import { loginStyles } from "../assets/dummyStyles";
 import { useAuth } from "../context/AuthContext";
-import App from "../utils/api";
-
+import API from "../utils/api"; // Changed from 'App' to 'API'
 import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
-
-const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 const Login = ({ onLoginSuccess = null }) => {
   const navigate = useNavigate();
@@ -21,11 +17,15 @@ const Login = ({ onLoginSuccess = null }) => {
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  // const API_BASE = "http://localhost:9999";
-  //const API_BASE = "https://quiz-application-five-azure.vercel.app/";
-  // Add this at the top of Login.jsx after imports
-  
+  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
+  const validate = () => {
+    const e = {};
+    if (!email) e.email = "Email is required";
+    else if (!isValidEmail(email)) e.email = "Please enter a valid email";
+    if (!password) e.password = "Password is required";
+    return e;
+  };
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
@@ -37,42 +37,112 @@ const Login = ({ onLoginSuccess = null }) => {
 
     try {
       const payload = { email: email.trim().toLowerCase(), password };
-      const resp = await fetch(`${API_BASE}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      let data = null;
-      try {
-        data = await resp.json();
-      } catch (e) {}
-
-      if (!resp.ok) {
-        const msg = data?.message || "Login failed";
-        setSubmitError(msg);
-        return;
+      
+      // Using API utility instead of fetch
+      const response = await API.post("/api/auth/login", payload);
+      
+      if (response.data?.token) {
+        // Use authLogin from context
+        authLogin(response.data.user, response.data.token);
       }
 
-      if (data?.token) {
-        // Use authLogin instead of manual localStorage
-        authLogin(data.user, data.token);
-      }
-
-      const user = data.user || { email: payload.email };
+      const user = response.data.user || { email: payload.email };
+      
+      // Dispatch custom event
       window.dispatchEvent(
-        new CustomEvent("authChanged", { detail: { user } }),
+        new CustomEvent("authChanged", { detail: { user } })
       );
 
       if (typeof onLoginSuccess === "function") onLoginSuccess(user);
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Login error:", err);
-      setSubmitError("Network error");
+      const errorMessage = err.response?.data?.message || "Login failed. Please try again.";
+      setSubmitError(errorMessage);
     } finally {
       setLoading(false);
     }
   };
+
+//   // Rest of your component remains the same...
+//   return (
+//     // ... your JSX remains unchanged
+//   );
+// };
+
+//export default Login;
+
+// import React, { useState } from "react";
+// import { loginStyles } from "../assets/dummyStyles";
+// import { useAuth } from "../context/AuthContext";
+// import App from "../utils/api";
+
+// import { useNavigate, Link } from "react-router-dom";
+// import { ArrowLeft, Mail, Lock, Eye, EyeOff, LogIn } from "lucide-react";
+
+// const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:9999";
+
+// const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+// const Login = ({ onLoginSuccess = null }) => {
+//   const navigate = useNavigate();
+//   const { login: authLogin } = useAuth();
+
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [showPassword, setShowPassword] = useState(false);
+//   const [errors, setErrors] = useState({});
+//   const [loading, setLoading] = useState(false);
+//   const [submitError, setSubmitError] = useState("");
+
+  
+
+//   const handleSubmit = async (ev) => {
+//     ev.preventDefault();
+//     setSubmitError("");
+//     const validation = validate();
+//     setErrors(validation);
+//     if (Object.keys(validation).length) return;
+//     setLoading(true);
+
+//     try {
+//       const payload = { email: email.trim().toLowerCase(), password };
+//       const resp = await fetch(`${API_BASE}/api/auth/login`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       let data = null;
+//       try {
+//         data = await resp.json();
+//       } catch (e) {}
+
+//       if (!resp.ok) {
+//         const msg = data?.message || "Login failed";
+//         setSubmitError(msg);
+//         return;
+//       }
+
+//       if (data?.token) {
+//         // Use authLogin instead of manual localStorage
+//         authLogin(data.user, data.token);
+//       }
+
+//       const user = data.user || { email: payload.email };
+//       window.dispatchEvent(
+//         new CustomEvent("authChanged", { detail: { user } }),
+//       );
+
+//       if (typeof onLoginSuccess === "function") onLoginSuccess(user);
+//       navigate("/", { replace: true });
+//     } catch (err) {
+//       console.error("Login error:", err);
+//       setSubmitError("Network error");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
   // EMAIL VALIDATE FUNCTION
   const validate = () => {
