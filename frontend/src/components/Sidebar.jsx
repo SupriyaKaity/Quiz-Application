@@ -31,7 +31,8 @@ import {
   RotateCcw,
 } from "lucide-react";
 
-const API_BASE = "http://localhost:9999";
+// const API_BASE = "http://localhost:9999";
+const API_BASE = "https://quiz-application-five-azure.vercel.app/";
 
 const Sidebar = ({ onExamStart, onExamEnd }) => {
   console.log("Sidebar component is rendering");

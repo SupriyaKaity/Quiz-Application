@@ -39,7 +39,8 @@ const Signup = ({ onSignupSuccess = null }) => {
     return e;
   };
 
-  const API_BASE = "http://localhost:9999";
+  // const API_BASE = "http://localhost:9999";
+  const API_BASE = "https://quiz-application-five-azure.vercel.app/";
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
