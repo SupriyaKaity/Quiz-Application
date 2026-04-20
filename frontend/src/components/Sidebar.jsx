@@ -2834,7 +2834,7 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
 
       <div
         className={sidebarStyles.mainContainer}
-        style={{ display: "flex", position: "relative" }}
+        style={{ display: 'flex', position: 'relative', minHeight: '100vh' }}
       >
         {/* Sidebar */}
         <aside
@@ -3006,19 +3006,7 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
         </aside>
 
         {/* Main Content */}
-        {/* <main
-          className={`${sidebarStyles.mainContent} main-content-fix`}
-          style={{
-            flex: 1,
-            marginLeft: window.innerWidth >= 768 ? "280px" : "0",
-            transition: "margin-left 0.3s ease",
-            minHeight: "100vh",
-            width: "100%",
-            overflowY: "auto",
-            position: "relative",
-          }}
-        > */}
-
+        {/* Main Content */}
         <main
           className={`${sidebarStyles.mainContent} main-content-fix`}
           style={{
@@ -3026,14 +3014,13 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
             marginLeft: window.innerWidth >= 768 ? "280px" : "0",
             transition: "margin-left 0.3s ease",
             minHeight: "100vh",
-            width: "auto",
+            width: "calc(100% - 280px)",
             overflowY: "auto",
             position: "relative",
-            display: "flex",
-            justifyContent: "center",
+            backgroundColor: "#f8fafc",
           }}
         >
-          {/* FIX 2: Mobile Menu Button - Always visible */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden fixed top-4 left-4 z-30">
             <button
               onClick={toggleSidebar}
@@ -3049,38 +3036,21 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
             </button>
           </div>
 
-          {/* FIX 1: Content wrapper with proper positioning */}
-          {/* <div
-            className={
-              isLevelSelectionPage ? "level-selection-content-wrapper" : ""
-            }
-            style={{
-              minHeight: "calc(100vh - 100px)",
-              paddingBottom: "0px",
-              paddingTop: window.innerWidth < 768 ? "60px" : "0",
-              width: "100%",
-              maxWidth: "1200px",
-              margin: "0 auto",
-              position: "relative",
-            }}
-          > */}
-
-          {/* FIX 1: Content wrapper with proper positioning - CENTERED */}
-          {/* FIX 1: Content wrapper with proper positioning - CENTERED */}
+          {/* Content Wrapper - CENTERED CORRECTLY */}
           <div
-            className={
-              isLevelSelectionPage ? "level-selection-content-wrapper" : ""
-            }
             style={{
-              minHeight: "calc(100vh - 100px)",
-              paddingBottom: "0px",
-              paddingTop: window.innerWidth < 768 ? "60px" : "20px",
-              paddingLeft: window.innerWidth < 768 ? "16px" : "24px",
-              paddingRight: window.innerWidth < 768 ? "16px" : "24px",
               width: "100%",
               maxWidth: "1200px",
-              margin: "0 auto",
-              position: "relative",
+              marginLeft: "auto",
+              marginRight: "auto",
+              paddingTop: window.innerWidth < 768 ? "70px" : "40px",
+              paddingBottom: "40px",
+              paddingLeft: window.innerWidth < 768 ? "16px" : "32px",
+              paddingRight: window.innerWidth < 768 ? "16px" : "32px",
+              minHeight: "100vh",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
             {!selectedTech ? (
@@ -3145,14 +3115,11 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
               </div>
             ) : !selectedLevel ? (
               <div
-                className="level-selection-wrapper"
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  minHeight: "calc(100vh - 80px)",
-                  padding: "40px 20px",
-                  marginTop: "0px",
+                  minHeight: "60vh",
                 }}
               >
                 <div className={sidebarStyles.levelSelectionContent}>
@@ -3169,14 +3136,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                   <p className={sidebarStyles.techSelectionDescription}>
                     Select a difficulty level to begin your challenge
                   </p>
-
-                  <div className={sidebarStyles.techSelectionPrompt}>
-                    <p className={sidebarStyles.techSelectionPromptText}>
-                      Get ready to test your{" "}
-                      {technologies.find((t) => t.id === selectedTech).name}{" "}
-                      knowledge!
-                    </p>
-                  </div>
                 </div>
               </div>
             ) : showResults ? (
