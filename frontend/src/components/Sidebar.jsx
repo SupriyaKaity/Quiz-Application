@@ -1158,7 +1158,10 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                 ) : (
                   <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
                     <div className="relative h-16 w-16">
-                      <svg className="w-full h-full -rotate-90">
+                      <svg
+                        viewBox="0 0 64 64"
+                        className="w-full h-full -rotate-90 overflow-visible"
+                      >
                         <circle
                           cx="32"
                           cy="32"
@@ -1210,7 +1213,10 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                   {isMobile && (
                     <div className="absolute right-8 top-10 z-10">
                       <div className="relative h-14 w-14">
-                        <svg className="h-full w-full -rotate-90">
+                        <svg
+                          viewBox="0 0 64 64"
+                          className="h-full w-full -rotate-90 overflow-visible"
+                        >
                           <circle
                             cx="32"
                             cy="32"
