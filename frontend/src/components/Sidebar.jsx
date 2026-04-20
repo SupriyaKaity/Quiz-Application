@@ -1206,9 +1206,9 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                 )}
 
                 {/* Rest of your quiz content */}
-                <div className={`${sidebarStyles.quizHeader} ${isMobile ? "relative pr-28 pt-6" : ""}`}>
+                <div className={`${sidebarStyles.quizHeader} ${isMobile ? "relative pt-6" : ""}`}>
                   {isMobile && (
-                    <div className="absolute right-5 top-8 z-10">
+                    <div className="absolute right-8 top-10 z-10">
                       <div className="relative h-14 w-14">
                         <svg className="h-full w-full -rotate-90">
                           <circle
@@ -1248,7 +1248,11 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                       </div>
                     </div>
                   )}
-                  <div className={sidebarStyles.quizTitleContainer}>
+                  <div
+                    className={`${sidebarStyles.quizTitleContainer} ${
+                      isMobile ? "pr-20" : ""
+                    }`}
+                  >
                     <h1 className={sidebarStyles.quizTitle}>
                       {selectedTechnology.name} -{" "}
                       {selectedLevel.charAt(0).toUpperCase() +
