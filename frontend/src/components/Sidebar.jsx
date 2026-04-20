@@ -3066,6 +3066,7 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
           > */}
 
           {/* FIX 1: Content wrapper with proper positioning - CENTERED */}
+          {/* FIX 1: Content wrapper with proper positioning - CENTERED */}
           <div
             className={
               isLevelSelectionPage ? "level-selection-content-wrapper" : ""
@@ -3074,15 +3075,12 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
               minHeight: "calc(100vh - 100px)",
               paddingBottom: "0px",
               paddingTop: window.innerWidth < 768 ? "60px" : "20px",
+              paddingLeft: window.innerWidth < 768 ? "16px" : "24px",
+              paddingRight: window.innerWidth < 768 ? "16px" : "24px",
               width: "100%",
-              maxWidth: "1400px",
-              marginLeft: "auto",
-              marginRight: "auto",
+              maxWidth: "1200px",
+              margin: "0 auto",
               position: "relative",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
             }}
           >
             {!selectedTech ? (
