@@ -336,7 +336,7 @@ export const sidebarStyles = {
 
   // Mobile header
   mobileHeader:
-    "sticky top-0 z-30 mb-4 flex items-center gap-3 border-b border-slate-200/80 bg-slate-50/95 px-1 py-3 backdrop-blur md:hidden",
+    "sticky top-0 z-30 mb-2 flex items-center gap-3 border-b border-slate-200/80 bg-slate-50/95 px-1 py-3 backdrop-blur md:hidden",
   menuButton:
     "flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm",
   mobileTitle:
@@ -357,7 +357,7 @@ export const sidebarStyles = {
   // Welcome screen
 
   welcomeContainer:
-    "flex min-h-0 items-start justify-center overflow-hidden p-3 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex min-h-0 items-start justify-center overflow-hidden px-3 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //welcomeContainer: "flex items-center justify-center p-4 pb-32",
 
   welcomeContent:
@@ -404,7 +404,7 @@ export const sidebarStyles = {
   // Results screen
 
   resultsContainer:
-    "flex h-auto min-h-0 items-start justify-center p-3 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex h-auto min-h-0 items-start justify-center px-3 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //resultsContainer: "flex items-center justify-center p-4 pb-32",
 
   resultsContent:
