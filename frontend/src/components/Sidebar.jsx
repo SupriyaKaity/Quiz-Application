@@ -2245,8 +2245,6 @@ import {
 } from "lucide-react";
 
 const Sidebar = ({ onExamStart, onExamEnd }) => {
-  console.log("Sidebar component is rendering");
-
   const [selectedTech, setSelectedTech] = useState(null);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -2262,69 +2260,67 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
   const submittedRef = useRef(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const asideRef = useRef(null);
-  const scrollPositionRef = useRef(0);
 
-  // Technology & levels
   const technologies = [
     {
       id: "html",
       name: "HTML",
       icon: <Globe size={20} />,
-      color: "bg-orange-50 text-orange-600 border-orange-200",
+      color: "bg-orange-50 text-orange-600",
     },
     {
       id: "css",
       name: "CSS",
       icon: <Layout size={20} />,
-      color: "bg-blue-50 text-blue-600 border-blue-200",
+      color: "bg-blue-50 text-blue-600",
     },
     {
       id: "js",
       name: "JavaScript",
       icon: <Code size={20} />,
-      color: "bg-yellow-50 text-yellow-600 border-yellow-200",
+      color: "bg-yellow-50 text-yellow-600",
     },
     {
       id: "react",
       name: "React",
       icon: <Cpu size={20} />,
-      color: "bg-cyan-50 text-cyan-600 border-cyan-200",
+      color: "bg-cyan-50 text-cyan-600",
     },
     {
       id: "node",
       name: "Node.js",
       icon: <Code size={20} />,
-      color: "bg-green-50 text-green-600 border-green-200",
+      color: "bg-green-50 text-green-600",
     },
     {
       id: "mongodb",
       name: "MongoDB",
       icon: <Database size={20} />,
-      color: "bg-emerald-50 text-emerald-600 border-emerald-200",
+      color: "bg-emerald-50 text-emerald-600",
     },
     {
       id: "java",
       name: "Java",
       icon: <Coffee size={20} />,
-      color: "bg-red-50 text-red-600 border-red-200",
+      color: "bg-red-50 text-red-600",
     },
     {
       id: "python",
       name: "Python",
       icon: <Terminal size={20} />,
-      color: "bg-indigo-50 text-indigo-600 border-indigo-200",
+      color: "bg-indigo-50 text-indigo-600",
     },
     {
       id: "cpp",
       name: "C++",
       icon: <Code size={20} />,
-      color: "bg-purple-50 text-purple-600 border-purple-200",
+      color: "bg-purple-50 text-purple-600",
     },
     {
       id: "bootstrap",
       name: "Bootstrap",
       icon: <Layout size={20} />,
-      color: "bg-pink-50 text-pink-600 border-pink-200",
+      color: "bg-pink-50 text-pink-600",
     },
   ];
 
@@ -2357,14 +2353,11 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     return questionsData[selectedTech]?.[selectedLevel] || [];
   };
 
-  // Calculate the score
   const calculateScore = () => {
     const questions = getQuestions();
     let correct = 0;
     questions.forEach((question, index) => {
-      if (userAnswers[index] === question.correctAnswer) {
-        correct++;
-      }
+      if (userAnswers[index] === question.correctAnswer) correct++;
     });
     return {
       correct,
@@ -2379,7 +2372,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
   const currentQ = questions[currentQuestion];
   const score = calculateScore();
 
-  // When quiz starts
   const startExam = () => {
     setExamActive(true);
     setIsExamActive(true);
@@ -2387,7 +2379,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     document.body.style.overflow = "hidden";
   };
 
-  // When quiz ends
   const endExam = () => {
     setExamActive(false);
     setIsExamActive(false);
@@ -2395,7 +2386,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     document.body.style.overflow = "";
   };
 
-  // Exit exam without saving
   const exitExam = () => {
     setSelectedLevel(null);
     setCurrentQuestion(0);
@@ -2408,7 +2398,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     endExam();
   };
 
-  // Reset quiz
   const resetQuiz = () => {
     setCurrentQuestion(0);
     setUserAnswers({});
@@ -2421,15 +2410,11 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     endExam();
   };
 
-  // Handle level select
   const handleLevelSelect = (levelId) => {
     if (isExamActive && selectedLevel !== null) {
-      toast.warning(
-        "Please finish current exam or use Exit button to change difficulty",
-      );
+      toast.warning("Please finish current exam first");
       return;
     }
-
     setSelectedLevel(levelId);
     setCurrentQuestion(0);
     setUserAnswers({});
@@ -2443,19 +2428,9 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
 
   const handleTechSelect = (techId) => {
     if (isExamActive && selectedLevel !== null) {
-      toast.warning(
-        "Please finish current exam or use Exit button to change topic",
-      );
+      toast.warning("Please finish current exam first");
       return;
     }
-
-    event?.preventDefault();
-
-    const currentScrollTop =
-      document.querySelector(".sidebar-content")?.scrollTop || 0;
-
-    localStorage.setItem("sidebarScrollPosition", currentScrollTop);
-
     if (selectedTech === techId) {
       setSelectedTech(null);
       setSelectedLevel(null);
@@ -2469,141 +2444,41 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     submittedRef.current = false;
     setTimeLeft(15);
     setTimerActive(true);
-
     if (window.innerWidth < 768) setIsSidebarOpen(false);
   };
 
-  // Force scroll to top on page refresh
   useEffect(() => {
-    localStorage.removeItem("sidebarScrollPosition");
-    sessionStorage.removeItem("sidebarScrollPosition");
-
-    setTimeout(() => {
-      const sidebarContent = document.querySelector(".sidebar-content");
-      if (sidebarContent) {
-        sidebarContent.scrollTop = 0;
-      }
-      window.scrollTo(0, 0);
-    }, 50);
-  }, []);
-
-  // Prevent any scroll restoration
-  useEffect(() => {
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-
-    return () => {
-      if ("scrollRestoration" in history) {
-        history.scrollRestoration = "auto";
-      }
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsSidebarOpen(true);
+      else setIsSidebarOpen(false);
     };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     if (selectedTech && !selectedLevel && !showResults && !currentQ) {
-      setTimeout(() => {
-        const sidebarContent = document.querySelector(".sidebar-content");
-        if (sidebarContent) {
-          sidebarContent.scrollTop = 0;
-        }
-      }, 50);
-    }
-  }, [selectedTech, selectedLevel, showResults, currentQ]);
-
-  useEffect(() => {
-    if (selectedTech && !selectedLevel && !showResults && !currentQ) {
-      setIsLevelPage(true);
       setIsLevelSelectionPage(true);
     } else {
-      setIsLevelPage(false);
       setIsLevelSelectionPage(false);
     }
   }, [selectedTech, selectedLevel, showResults, currentQ]);
 
-  useEffect(() => {
-    const savedScrollPosition = localStorage.getItem("sidebarScrollPosition");
-    if (savedScrollPosition) {
-      setTimeout(() => {
-        const sidebarContent = document.querySelector(".sidebar-content");
-        if (sidebarContent) {
-          sidebarContent.scrollTop = parseInt(savedScrollPosition);
-        }
-      }, 50);
-    }
-  }, [selectedTech, selectedLevel]);
-
-  useEffect(() => {
-    if (isSidebarOpen && window.innerWidth < 768) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isSidebarOpen]);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      sessionStorage.setItem("isRefreshing", "true");
-    };
-
-    const handleLoad = () => {
-      const isRefreshing = sessionStorage.getItem("isRefreshing");
-      if (isRefreshing) {
-        setTimeout(() => {
-          const sidebarContent = document.querySelector(".sidebar-content");
-          if (sidebarContent) {
-            sidebarContent.scrollTop = 0;
-          }
-        }, 100);
-        sessionStorage.removeItem("isRefreshing");
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    window.addEventListener("load", handleLoad);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      window.removeEventListener("load", handleLoad);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (selectedTech) {
-      setTimeout(() => {
-        const sidebarHeader = document.querySelector(
-          ".sidebarHeader, .sidebar-header",
-        );
-        if (sidebarHeader) {
-          const sidebarContent = document.querySelector(".sidebar-content");
-          if (sidebarContent) {
-            sidebarContent.scrollTop = 0;
-          }
-        }
-      }, 100);
-    }
-  }, [selectedTech]);
-
-  // Timer effect
   useEffect(() => {
     let timer;
     if (
       showResults === false &&
       currentQ &&
       timerActive &&
-      !userAnswers[currentQuestion]
+      userAnswers[currentQuestion] === undefined
     ) {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timer);
             if (currentQuestion < questions.length - 1) {
-              const newAnswers = { ...userAnswers, [currentQuestion]: null };
-              setUserAnswers(newAnswers);
+              setUserAnswers({ ...userAnswers, [currentQuestion]: null });
               setCurrentQuestion((prev) => prev + 1);
               setTimeLeft(15);
             } else {
@@ -2615,7 +2490,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
         });
       }, 1000);
     }
-
     return () => {
       if (timer) clearInterval(timer);
     };
@@ -2628,7 +2502,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     questions.length,
   ]);
 
-  // Reset timer when question changes
   useEffect(() => {
     if (!showResults && currentQ) {
       setTimeLeft(15);
@@ -2636,94 +2509,21 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
     }
   }, [currentQuestion, currentQ, showResults]);
 
-  // Retake quiz event listener
-  useEffect(() => {
-    const handleRetake = (event) => {
-      const { technology, level } = event.detail;
-      const techExists = technologies.find((t) => t.id === technology);
-      if (techExists) {
-        setSelectedTech(technology);
-        setSelectedLevel(level);
-        setCurrentQuestion(0);
-        setUserAnswers({});
-        setShowResults(false);
-        submittedRef.current = false;
-        startExam();
-
-        if (window.innerWidth < 768) setIsSidebarOpen(false);
-      }
-    };
-
-    window.addEventListener("retakeQuiz", handleRetake);
-    return () => {
-      window.removeEventListener("retakeQuiz", handleRetake);
-    };
-  }, [technologies]);
-
-  // Handle responsive sidebar
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarOpen(true);
-      } else {
-        setIsSidebarOpen(false);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      if (isSidebarOpen) document.body.style.overflow = "hidden";
-      else document.body.style.overflow = "";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isSidebarOpen]);
-
-  useEffect(() => {
-    const isPageRefresh =
-      performance.navigation?.type === 1 ||
-      document.querySelector("[data-tech]") === null;
-
-    if (isPageRefresh) {
-      setTimeout(() => {
-        const sidebarContent = document.querySelector(".sidebar-content");
-        if (sidebarContent) {
-          sidebarContent.scrollTop = 0;
-        }
-      }, 100);
-    }
-  }, []);
-
   const getPerformanceStatus = () => {
     if (score.percentage >= 90)
       return {
         text: "Outstanding!",
-        color: "bg-gradient-to-r from-amber-200 to-amber-300",
-        icon: <Sparkles className="text-amber-800" />,
+        color: "bg-amber-200",
+        icon: <Sparkles />,
       };
     if (score.percentage >= 75)
-      return {
-        text: "Excellent!",
-        color: "bg-gradient-to-r from-blue-200 to-indigo-200",
-        icon: <Trophy className="text-blue-800" />,
-      };
+      return { text: "Excellent!", color: "bg-blue-200", icon: <Trophy /> };
     if (score.percentage >= 60)
-      return {
-        text: "Good Job!",
-        color: "bg-gradient-to-r from-green-200 to-teal-200",
-        icon: <Award className="text-green-800" />,
-      };
+      return { text: "Good Job!", color: "bg-green-200", icon: <Award /> };
     return {
       text: "Keep Practicing",
-      color: "bg-gradient-to-r from-gray-200 to-gray-300",
-      icon: <BookOpen className="text-gray-800" />,
+      color: "bg-gray-200",
+      icon: <BookOpen />,
     };
   };
 
@@ -2731,20 +2531,9 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
 
   const handleAnswerSelect = (answerIndex) => {
-    if (userAnswers[currentQuestion] !== undefined) {
-      console.log("Already answered this question");
-      return;
-    }
-
-    console.log("Answer selected:", answerIndex);
-
-    const newAnswers = {
-      ...userAnswers,
-      [currentQuestion]: answerIndex,
-    };
-    setUserAnswers(newAnswers);
+    if (userAnswers[currentQuestion] !== undefined) return;
+    setUserAnswers({ ...userAnswers, [currentQuestion]: answerIndex });
     setTimerActive(false);
-
     setTimeout(() => {
       if (currentQuestion + 1 < questions.length) {
         setCurrentQuestion(currentQuestion + 1);
@@ -2758,624 +2547,767 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
   };
 
   const submitResult = async () => {
-    console.log("submitResult function called");
-    console.log("submittedRef.current:", submittedRef.current);
-    console.log("selectedTech:", selectedTech);
-    console.log("selectedLevel:", selectedLevel);
-    console.log("score:", score);
-
-    if (submittedRef.current) {
-      console.log("Already submitted, returning");
-      return;
-    }
-    if (!selectedTech || !selectedLevel) {
-      console.log("No tech or level selected");
-      return;
-    }
-
+    if (submittedRef.current || !selectedTech || !selectedLevel) return;
     const payload = {
-      title: `${selectedTech.toUpperCase()} - ${
-        selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)
-      } Quiz`,
+      title: `${selectedTech.toUpperCase()} - ${selectedLevel.charAt(0).toUpperCase() + selectedLevel.slice(1)} Quiz`,
       technology: selectedTech,
       level: selectedLevel,
       totalQuestions: score.total,
       correct: score.correct,
       wrong: score.total - score.correct,
     };
-
-    console.log("Saving result payload:", payload);
-
     try {
       submittedRef.current = true;
       toast.info("Saving your result...");
-
       const response = await API.post("/api/results", payload);
-
-      console.log("Server response:", response.data);
-
-      if (response.data && response.data.success) {
+      if (response.data && response.data.success)
         toast.success("Result saved successfully!");
-      } else {
-        toast.error("Failed to save result");
-        submittedRef.current = false;
-      }
+      else toast.error("Failed to save result");
     } catch (err) {
       submittedRef.current = false;
-      console.error("Error saving result:", err);
-      console.error("Error response data:", err.response?.data);
-      console.error("Error status:", err.response?.status);
-
-      if (err?.response?.status === 401) {
-        toast.error("Please login again to save results");
-      } else {
-        toast.error(err?.response?.data?.message || "Could not save result");
-      }
+      toast.error(err?.response?.data?.message || "Could not save result");
     }
   };
 
   useEffect(() => {
-    if (showResults && score.total) {
-      console.log("Calling submitResult");
-      submitResult();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (showResults && score.total) submitResult();
   }, [showResults, score.total]);
 
   return (
-    <div className={sidebarStyles.pageContainer}>
+    <div style={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       {/* Mobile overlay */}
       {isSidebarOpen && window.innerWidth < 768 && (
         <div
           onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.5)",
+            zIndex: 40,
+          }}
         ></div>
       )}
 
-      <div
-        className={sidebarStyles.mainContainer}
-        style={{ display: "flex", position: "relative", minHeight: "100vh" }}
+      {/* Sidebar */}
+      <aside
+        ref={asideRef}
+        style={{
+          position: window.innerWidth < 768 ? "fixed" : "relative",
+          width: "280px",
+          height: "100vh",
+          backgroundColor: "white",
+          boxShadow: "2px 0 10px rgba(0,0,0,0.1)",
+          transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)",
+          transition: "transform 0.3s ease",
+          zIndex: 50,
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        {/* Sidebar */}
-        <aside
-          ref={asideRef}
-          className={`fixed md:relative z-50 transition-transform duration-300 ease-in-out ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } md:translate-x-0`}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100vh",
-            top: 0,
-            left: 0,
-            width: "280px",
-            backgroundColor: "white",
-            boxShadow: "2px 0 10px rgba(0,0,0,0.1)",
-            overflow: "hidden", // FIX 3: Hide sidebar overflow
-          }}
-        >
+        {/* Sidebar Header */}
+        <div style={{ padding: "20px", borderBottom: "1px solid #e5e7eb" }}>
           <div
-            className={sidebarStyles.sidebarHeader}
             style={{
-              padding: "20px",
-              borderBottom: "1px solid #e5e7eb",
-              position: "relative",
-              flexShrink: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <div className={sidebarStyles.headerDecoration1}></div>
-            <div className={sidebarStyles.headerDecoration2}></div>
-
-            <div className={sidebarStyles.headerContent}>
-              <div className={sidebarStyles.logoContainer}>
-                <div className={sidebarStyles.logoIcon}>
-                  <BookOpen size={28} className="text-indigo-700" />
-                </div>
-                <div>
-                  <h1 className={sidebarStyles.logoTitle}>Tech Quiz Master</h1>
-                  <p className={sidebarStyles.logoSubtitle}>
-                    Test your knowledge and improve your skills
-                  </p>
-                </div>
-              </div>
-              {/* Close button - only visible on mobile */}
-              <button
-                onClick={toggleSidebar}
-                className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition absolute top-4 right-4"
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-
-          <div
-            className={sidebarStyles.sidebarContent}
-            style={{
-              flex: "1 1 auto",
-              overflowY: "auto",
-              minHeight: 0,
-              padding: "16px",
-              height: "calc(100% - 180px)",
-            }}
-          >
-            <div className={sidebarStyles.technologiesHeader}>
-              <h2 className={sidebarStyles.technologiesTitle}>Technologies</h2>
-              <span className={sidebarStyles.technologiesCount}>
-                {technologies.length} options
-              </span>
-            </div>
-
-            {technologies.map((tech) => (
-              <div
-                key={tech.id}
-                className={`${sidebarStyles.techItem} ${
-                  isExamActive && selectedTech !== tech.id
-                    ? "opacity-40 blur-[1px] pointer-events-none transition-all duration-300"
-                    : ""
-                }`}
-                data-tech={tech.id}
-              >
-                <button
-                  onClick={() => handleTechSelect(tech.id)}
-                  className={`${sidebarStyles.techButton} ${
-                    selectedTech === tech.id
-                      ? `${tech.color} ${sidebarStyles.techButtonSelected}`
-                      : sidebarStyles.techButtonNormal
-                  } ${isExamActive && selectedTech !== tech.id ? "cursor-not-allowed" : ""}`}
-                >
-                  <div className={sidebarStyles.techButtonContent}>
-                    <span className={`${sidebarStyles.techIcon} ${tech.color}`}>
-                      {tech.icon}
-                    </span>
-                    <span className={sidebarStyles.techName}>{tech.name}</span>
-                  </div>
-
-                  {selectedTech === tech.id ? (
-                    <ChevronDown size={18} className="text-current" />
-                  ) : (
-                    <ChevronRight size={18} className="text-gray-400" />
-                  )}
-                </button>
-
-                {selectedTech === tech.id && (
-                  <div
-                    className={`${sidebarStyles.levelsContainer} ${
-                      isExamActive
-                        ? "opacity-40 blur-[1px] pointer-events-none"
-                        : ""
-                    }`}
-                  >
-                    <h3 className={sidebarStyles.levelsTitle}>
-                      <span>Select Difficulty</span>
-                      <span className={sidebarStyles.techBadge}>
-                        {technologies.find((t) => t.id === selectedTech).name}
-                      </span>
-                    </h3>
-
-                    {levels.map((level) => (
-                      <button
-                        key={level.id}
-                        onClick={() => handleLevelSelect(level.id)}
-                        className={`${sidebarStyles.levelButton} ${
-                          selectedLevel === level.id
-                            ? `${level.color} ${sidebarStyles.levelButtonSelected}`
-                            : sidebarStyles.levelButtonNormal
-                        } ${isExamActive ? "cursor-not-allowed" : ""}`}
-                      >
-                        <div className={sidebarStyles.levelButtonContent}>
-                          <span
-                            className={`${sidebarStyles.levelIcon} ${
-                              selectedLevel === level.id
-                                ? "bg-white/40"
-                                : "bg-gray-100"
-                            }`}
-                          >
-                            {level.icon}
-                          </span>
-                          <span>{level.name}</span>
-                        </div>
-                        <span className={sidebarStyles.levelQuestions}>
-                          {level.questions} Qs
-                        </span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div
-            className={sidebarStyles.sidebarFooter}
-            style={{
-              flexShrink: 0,
-              marginTop: "auto",
-              padding: "16px",
-              borderTop: "1px solid #e5e7eb",
-              textAlign: "center",
-              backgroundColor: "white",
-              position: "relative",
-              bottom: 0,
-              width: "100%",
-            }}
-          >
-            <div className={sidebarStyles.footerContent}>
-              <div className={sidebarStyles.footerContentCenter}>
-                <p>Master your skills on Technology..</p>
-                <p className={sidebarStyles.footerHighlight}>
-                  Keep Learning, Keep Growing!
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <BookOpen size={28} style={{ color: "#4f46e5" }} />
+              <div>
+                <h1 style={{ fontSize: "18px", fontWeight: "bold" }}>
+                  Tech Quiz Master
+                </h1>
+                <p style={{ fontSize: "12px", color: "#6b7280" }}>
+                  Test your knowledge
                 </p>
               </div>
             </div>
+            {window.innerWidth < 768 && (
+              <button onClick={toggleSidebar} style={{ padding: "8px" }}>
+                <X size={20} />
+              </button>
+            )}
           </div>
-        </aside>
+        </div>
 
-        {/* Main Content */}
-        <main
-          style={{
-            flex: 1,
-            marginLeft: window.innerWidth >= 768 ? "280px" : "0",
-            minHeight: "100vh",
-            width: window.innerWidth >= 768 ? "calc(100% - 280px)" : "100%",
-            backgroundColor: "#f8fafc",
-            overflowY: "auto",
-            position: "relative",
-          }}
-        >
-          {/* Mobile Menu Button */}
-          <div className="md:hidden fixed top-4 left-4 z-30">
-            <button
-              onClick={toggleSidebar}
-              className="p-2 bg-white rounded-lg shadow-lg hover:bg-gray-50 transition"
-            >
-              <Menu size={24} />
-            </button>
-          </div>
-
-          {/* Content - Starts from TOP like 2nd image */}
+        {/* Sidebar Content - Scrollable */}
+        <div style={{ flex: 1, overflowY: "auto", padding: "16px" }}>
           <div
             style={{
-              width: "100%",
-              maxWidth: "1200px",
-              margin: "0 auto",
-              padding: window.innerWidth < 768 ? "80px 20px 40px" : "40px",
+              display: "flex",
+              justifyContent: "space-between",
+              marginBottom: "16px",
             }}
           >
-            {!selectedTech ? (
-              <div className={sidebarStyles.welcomeContainer}>
-                <div className={sidebarStyles.welcomeContent}>
-                  <div className={sidebarStyles.welcomeIcon}>
-                    <Award size={64} className="text-indigo-700" />
-                  </div>
-                  <h2 className={sidebarStyles.welcomeTitle}>
-                    Welcome to Tech Quiz Master
-                  </h2>
-                  <p className={sidebarStyles.welcomeDescription}>
-                    Select a technology from the sidebar to start your quiz
-                    journey. Test your knowledge at basic, intermediate, or
-                    advanced levels.
+            <h2 style={{ fontWeight: "bold" }}>Technologies</h2>
+            <span style={{ fontSize: "12px", color: "#6b7280" }}>
+              {technologies.length} options
+            </span>
+          </div>
+
+          {technologies.map((tech) => (
+            <div key={tech.id} style={{ marginBottom: "8px" }}>
+              <button
+                onClick={() => handleTechSelect(tech.id)}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "12px",
+                  borderRadius: "8px",
+                  backgroundColor:
+                    selectedTech === tech.id ? "#f3f4f6" : "transparent",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "12px" }}
+                >
+                  <span
+                    className={tech.color}
+                    style={{ padding: "4px", borderRadius: "4px" }}
+                  >
+                    {tech.icon}
+                  </span>
+                  <span>{tech.name}</span>
+                </div>
+                {selectedTech === tech.id ? (
+                  <ChevronDown size={18} />
+                ) : (
+                  <ChevronRight size={18} />
+                )}
+              </button>
+
+              {selectedTech === tech.id && (
+                <div style={{ marginLeft: "32px", marginTop: "8px" }}>
+                  <h3
+                    style={{
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      marginBottom: "8px",
+                    }}
+                  >
+                    Select Difficulty
+                  </h3>
+                  {levels.map((level) => (
+                    <button
+                      key={level.id}
+                      onClick={() => handleLevelSelect(level.id)}
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        padding: "10px",
+                        marginBottom: "4px",
+                        borderRadius: "6px",
+                        backgroundColor:
+                          selectedLevel === level.id
+                            ? "#e5e7eb"
+                            : "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                        }}
+                      >
+                        <span>{level.icon}</span>
+                        <span>{level.name}</span>
+                      </div>
+                      <span style={{ fontSize: "12px", color: "#6b7280" }}>
+                        {level.questions} Qs
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Sidebar Footer - ALWAYS VISIBLE */}
+        <div
+          style={{
+            padding: "16px",
+            borderTop: "1px solid #e5e7eb",
+            textAlign: "center",
+            backgroundColor: "white",
+          }}
+        >
+          <p style={{ fontSize: "12px", color: "#6b7280" }}>
+            Master your skills on Technology..
+          </p>
+          <p style={{ fontSize: "12px", fontWeight: "500", color: "#4f46e5" }}>
+            Keep Learning, Keep Growing!
+          </p>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main
+        style={{
+          flex: 1,
+          marginLeft: window.innerWidth >= 768 ? "0" : "0",
+          height: "100vh",
+          overflowY: "auto",
+          backgroundColor: "#f8fafc",
+        }}
+      >
+        {/* Mobile Menu Button */}
+        {window.innerWidth < 768 && (
+          <button
+            onClick={toggleSidebar}
+            style={{
+              position: "fixed",
+              top: "16px",
+              left: "16px",
+              zIndex: 30,
+              padding: "8px",
+              backgroundColor: "white",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <Menu size={24} />
+          </button>
+        )}
+
+        {/* Content Wrapper */}
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: window.innerWidth < 768 ? "80px 20px 40px" : "40px",
+          }}
+        >
+          {!selectedTech ? (
+            <div style={{ textAlign: "center" }}>
+              <div style={{ marginBottom: "24px" }}>
+                <Award size={64} style={{ color: "#4f46e5" }} />
+              </div>
+              <h2
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  marginBottom: "16px",
+                }}
+              >
+                Welcome to Tech Quiz Master
+              </h2>
+              <p style={{ color: "#6b7280", marginBottom: "32px" }}>
+                Select a technology from the sidebar to start your quiz journey.
+                Test your knowledge at basic, intermediate, or advanced levels.
+              </p>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    window.innerWidth < 768 ? "1fr" : "repeat(3, 1fr)",
+                  gap: "20px",
+                  marginBottom: "32px",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Star
+                    size={24}
+                    style={{ color: "#eab308", marginBottom: "12px" }}
+                  />
+                  <h3 style={{ fontWeight: "bold", marginBottom: "8px" }}>
+                    Multiple Technologies
+                  </h3>
+                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
+                    HTML, CSS, JavaScript, React, and more
                   </p>
-
-                  <div className={sidebarStyles.featuresGrid}>
-                    <div className={sidebarStyles.featureCard}>
-                      <div className={sidebarStyles.featureIcon}>
-                        <Star size={20} />
-                      </div>
-                      <h3 className={sidebarStyles.featureTitle}>
-                        Multiple Technologies
-                      </h3>
-                      <p className={sidebarStyles.featureDescription}>
-                        HTML, CSS, JavaScript, React, and more
-                      </p>
-                    </div>
-
-                    <div className={sidebarStyles.featureCard}>
-                      <div className={sidebarStyles.featureIcon}>
-                        <Zap size={20} />
-                      </div>
-                      <h3 className={sidebarStyles.featureTitle}>
-                        Three Difficulty Levels
-                      </h3>
-                      <p className={sidebarStyles.featureDescription}>
-                        Basic, Intermediate, and Advanced challenges
-                      </p>
-                    </div>
-
-                    <div className={sidebarStyles.featureCard}>
-                      <div className={sidebarStyles.featureIcon}>
-                        <Target size={20} />
-                      </div>
-                      <h3 className={sidebarStyles.featureTitle}>
-                        Instant Feedback
-                      </h3>
-                      <p className={sidebarStyles.featureDescription}>
-                        Get detailed results and performance analysis
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className={sidebarStyles.welcomePrompt}>
-                    <p className={sidebarStyles.welcomePromptText}>
-                      <Sparkles size={16} className="mr-2" />
-                      Select any technology to begin your learning adventure!
-                    </p>
-                  </div>
+                </div>
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Zap
+                    size={24}
+                    style={{ color: "#eab308", marginBottom: "12px" }}
+                  />
+                  <h3 style={{ fontWeight: "bold", marginBottom: "8px" }}>
+                    Three Difficulty Levels
+                  </h3>
+                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
+                    Basic, Intermediate, and Advanced challenges
+                  </p>
+                </div>
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                    boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Target
+                    size={24}
+                    style={{ color: "#eab308", marginBottom: "12px" }}
+                  />
+                  <h3 style={{ fontWeight: "bold", marginBottom: "8px" }}>
+                    Instant Feedback
+                  </h3>
+                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
+                    Get detailed results and performance analysis
+                  </p>
                 </div>
               </div>
-            ) : !selectedLevel ? (
+
+              <div
+                style={{
+                  padding: "16px",
+                  backgroundColor: "#e0e7ff",
+                  borderRadius: "8px",
+                  display: "inline-block",
+                }}
+              >
+                <Sparkles
+                  size={16}
+                  style={{ display: "inline", marginRight: "8px" }}
+                />
+                <span>
+                  Select any technology to begin your learning adventure!
+                </span>
+              </div>
+            </div>
+          ) : !selectedLevel ? (
+            <div style={{ textAlign: "center", marginTop: "100px" }}>
+              <div
+                className={
+                  technologies.find((t) => t.id === selectedTech)?.color
+                }
+                style={{
+                  display: "inline-block",
+                  padding: "16px",
+                  borderRadius: "50%",
+                  marginBottom: "16px",
+                }}
+              >
+                {technologies.find((t) => t.id === selectedTech)?.icon}
+              </div>
+              <h2
+                style={{
+                  fontSize: "24px",
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                }}
+              >
+                {technologies.find((t) => t.id === selectedTech)?.name} Quiz
+              </h2>
+              <p style={{ color: "#6b7280" }}>
+                Select a difficulty level to begin your challenge
+              </p>
+            </div>
+          ) : showResults ? (
+            <div style={{ textAlign: "center" }}>
+              <div
+                className={performance.color}
+                style={{
+                  display: "inline-block",
+                  padding: "16px",
+                  borderRadius: "50%",
+                  marginBottom: "16px",
+                }}
+              >
+                {performance.icon}
+              </div>
+              <h2
+                style={{
+                  fontSize: "28px",
+                  fontWeight: "bold",
+                  marginBottom: "8px",
+                }}
+              >
+                Quiz Completed!
+              </h2>
+              <p style={{ color: "#6b7280", marginBottom: "24px" }}>
+                You've completed the {selectedLevel} level
+              </p>
+              <div
+                className={performance.color}
+                style={{
+                  display: "inline-block",
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                  marginBottom: "32px",
+                }}
+              >
+                {performance.text}
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    window.innerWidth < 768 ? "1fr" : "repeat(2, 1fr)",
+                  gap: "20px",
+                  maxWidth: "400px",
+                  margin: "0 auto 32px",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                  }}
+                >
+                  <CheckCircle
+                    size={32}
+                    style={{ color: "#22c55e", marginBottom: "8px" }}
+                  />
+                  <p style={{ fontSize: "28px", fontWeight: "bold" }}>
+                    {score.correct}
+                  </p>
+                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
+                    Correct Answers
+                  </p>
+                </div>
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "white",
+                    borderRadius: "12px",
+                  }}
+                >
+                  <XCircle
+                    size={32}
+                    style={{ color: "#ef4444", marginBottom: "8px" }}
+                  />
+                  <p style={{ fontSize: "28px", fontWeight: "bold" }}>
+                    {score.total - score.correct}
+                  </p>
+                  <p style={{ fontSize: "14px", color: "#6b7280" }}>
+                    Incorrect Answers
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ maxWidth: "400px", margin: "0 auto 32px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <span>Overall Score</span>
+                  <span style={{ fontWeight: "bold" }}>
+                    {score.percentage}%
+                  </span>
+                </div>
+                <div
+                  style={{
+                    height: "8px",
+                    backgroundColor: "#e5e7eb",
+                    borderRadius: "4px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${score.percentage}%`,
+                      height: "100%",
+                      backgroundColor:
+                        score.percentage >= 80
+                          ? "#22c55e"
+                          : score.percentage >= 60
+                            ? "#eab308"
+                            : "#ef4444",
+                    }}
+                  ></div>
+                </div>
+              </div>
+
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
+                  gap: "16px",
                   justifyContent: "center",
-                  minHeight: "50vh",
                 }}
               >
-                <div className={sidebarStyles.levelSelectionContent}>
+                <button
+                  onClick={() => {
+                    resetQuiz();
+                    window.location.href = "/";
+                  }}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#4f46e5",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <Home size={18} /> Back to Home
+                </button>
+                <button
+                  onClick={resetQuiz}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#ec4899",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <RotateCcw size={18} /> Try Again
+                </button>
+              </div>
+            </div>
+          ) : currentQ ? (
+            <div>
+              <div
+                style={{
+                  position: "fixed",
+                  top: "16px",
+                  right: "16px",
+                  zIndex: 50,
+                  display: "flex",
+                  gap: "12px",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "64px",
+                    height: "64px",
+                  }}
+                >
+                  <svg
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      transform: "rotate(-90deg)",
+                    }}
+                  >
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke="#e5e7eb"
+                      strokeWidth="5"
+                      fill="none"
+                    />
+                    <circle
+                      cx="32"
+                      cy="32"
+                      r="28"
+                      stroke={
+                        timeLeft <= 5
+                          ? "#ef4444"
+                          : timeLeft <= 10
+                            ? "#f97316"
+                            : "#22c55e"
+                      }
+                      strokeWidth="5"
+                      fill="none"
+                      strokeDasharray={`${(timeLeft / 15) * 175.9} 175.9`}
+                      strokeLinecap="round"
+                    />
+                  </svg>
                   <div
-                    className={`${sidebarStyles.techSelectionIcon} ${
-                      technologies.find((t) => t.id === selectedTech).color
-                    }`}
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
                   >
-                    {technologies.find((t) => t.id === selectedTech).icon}
-                  </div>
-                  <h2 className={sidebarStyles.techSelectionTitle}>
-                    {technologies.find((t) => t.id === selectedTech).name} Quiz
-                  </h2>
-                  <p className={sidebarStyles.techSelectionDescription}>
-                    Select a difficulty level to begin your challenge
-                  </p>
-                </div>
-              </div>
-            ) : showResults ? (
-              <div className={sidebarStyles.resultsContainer}>
-                <div className={sidebarStyles.resultsContent}>
-                  <div className={sidebarStyles.resultsHeader}>
-                    <div
-                      className={`${sidebarStyles.performanceIcon} ${performance.color}`}
-                    >
-                      {performance.icon}
-                    </div>
-                    <h2 className={sidebarStyles.resultsTitle}>
-                      Quiz Completed!
-                    </h2>
-                    <p className={sidebarStyles.resultsSubtitle}>
-                      You've completed the {selectedLevel} level
-                    </p>
-                    <div
-                      className={`${sidebarStyles.performanceBadge} ${performance.color}`}
-                    >
-                      {performance.text}
-                    </div>
-
-                    <div className={sidebarStyles.scoreGrid}>
-                      <div className={sidebarStyles.scoreCard}>
-                        <div className={sidebarStyles.scoreIcon}>
-                          <CheckCircle size={24} />
-                        </div>
-                        <p className={sidebarStyles.scoreNumber}>
-                          {score.correct}
-                        </p>
-                        <p className={sidebarStyles.scoreLabel}>
-                          Correct Answers
-                        </p>
-                      </div>
-
-                      <div className={sidebarStyles.scoreCard}>
-                        <div className={sidebarStyles.scoreIcon}>
-                          <XCircle size={24} />
-                        </div>
-                        <p className={sidebarStyles.scoreNumber}>
-                          {score.total - score.correct}
-                        </p>
-                        <p className={sidebarStyles.scoreLabel}>
-                          Incorrect Answers
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={sidebarStyles.scoreProgress}>
-                      <div className={sidebarStyles.scoreProgressHeader}>
-                        <span className={sidebarStyles.scoreProgressTitle}>
-                          Overall Score
-                        </span>
-                        <span className={sidebarStyles.scoreProgressPercentage}>
-                          {score.percentage}%
-                        </span>
-                      </div>
-                      <div className={sidebarStyles.scoreProgressBar}>
-                        <div
-                          className={`${sidebarStyles.scoreProgressFill} ${
-                            score.percentage >= 80
-                              ? "bg-green-400"
-                              : score.percentage >= 60
-                                ? "bg-yellow-400"
-                                : "bg-red-400"
-                          }`}
-                          style={{ width: `${score.percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                    <div className="flex gap-4 justify-center mt-6">
-                      <button
-                        onClick={() => {
-                          resetQuiz();
-                          window.location.href = "/";
-                        }}
-                        className="px-6 py-2.5 bg-gradient-to-r from-violet-400 to-purple-400 text-white text-sm rounded-xl hover:from-violet-500 hover:to-purple-500 transition font-medium cursor-pointer shadow-md flex items-center gap-2"
-                      >
-                        <Home size={18} />
-                        Back to Home
-                      </button>
-                      <button
-                        onClick={resetQuiz}
-                        className="px-6 py-2.5 bg-gradient-to-r from-pink-400 to-rose-400 text-white text-sm rounded-xl hover:from-pink-500 hover:to-rose-500 transition font-medium cursor-pointer shadow-md flex items-center gap-2"
-                      >
-                        <RotateCcw size={18} />
-                        Try Again
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ) : currentQ ? (
-              <div className={sidebarStyles.quizContainer}>
-                <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
-                  <div className="relative w-16 h-16">
-                    <svg className="w-full h-full -rotate-90">
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        stroke="#e5e7eb"
-                        strokeWidth="5"
-                        fill="none"
-                      />
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        stroke={
-                          timeLeft <= 5
-                            ? "#ef4444"
-                            : timeLeft <= 10
-                              ? "#f97316"
-                              : "#22c55e"
-                        }
-                        strokeWidth="5"
-                        fill="none"
-                        strokeDasharray={`${(timeLeft / 15) * 175.9} 175.9`}
-                        strokeLinecap="round"
-                        className="transition-all duration-1000"
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <span
-                        className={`text-lg font-bold ${
-                          timeLeft <= 5
-                            ? "text-red-500"
-                            : timeLeft <= 10
-                              ? "text-orange-500"
-                              : "text-green-500"
-                        }`}
-                      >
-                        {timeLeft}
-                      </span>
-                      <span className="text-[8px] text-gray-400">sec</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={exitExam}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-300 to-yellow-300 text-amber-900 text-sm rounded-xl hover:from-amber-400 hover:to-yellow-400 transition font-medium cursor-pointer shadow-md border border-amber-200"
-                  >
-                    <LogOut size={18} />
-                    Exit Quiz
-                  </button>
-                </div>
-
-                <div className={sidebarStyles.quizHeader}>
-                  <div className={sidebarStyles.quizTitleContainer}>
-                    <h1 className={sidebarStyles.quizTitle}>
-                      {technologies.find((t) => t.id === selectedTech).name} -{" "}
-                      {selectedLevel.charAt(0).toUpperCase() +
-                        selectedLevel.slice(1)}{" "}
-                      Level
-                    </h1>
-                    <span className={sidebarStyles.quizCounter}>
-                      Question {currentQuestion + 1} of {questions.length}
+                    <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      {timeLeft}
+                    </span>
+                    <span style={{ fontSize: "8px", color: "#9ca3af" }}>
+                      sec
                     </span>
                   </div>
-
-                  <div className={sidebarStyles.progressBar}>
-                    <div
-                      className={sidebarStyles.progressFill}
-                      style={{
-                        width: `${((currentQuestion + 1) / (questions.length || 1)) * 100}%`,
-                      }}
-                    />
-                  </div>
                 </div>
+                <button
+                  onClick={exitExam}
+                  style={{
+                    padding: "10px 20px",
+                    background: "linear-gradient(to right, #fcd34d, #fef08a)",
+                    color: "#78350f",
+                    borderRadius: "12px",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <LogOut size={18} /> Exit Quiz
+                </button>
+              </div>
 
-                <div className={sidebarStyles.questionContainer}>
-                  <div className={sidebarStyles.questionHeader}>
-                    <div className={sidebarStyles.questionIcon}>
-                      <Target size={20} />
-                    </div>
-                    <h2 className={sidebarStyles.questionText}>
-                      {currentQ.question}
-                    </h2>
-                  </div>
-
-                  <div className={sidebarStyles.optionsContainer}>
-                    {currentQ.options.map((option, index) => {
-                      const isSelected = userAnswers[currentQuestion] === index;
-                      const isCorrect = index === currentQ.correctAnswer;
-                      const showFeedback =
-                        userAnswers[currentQuestion] !== undefined;
-
-                      return (
-                        <button
-                          key={index}
-                          onClick={() => {
-                            if (userAnswers[currentQuestion] === undefined) {
-                              handleAnswerSelect(index);
-                            }
-                          }}
-                          className={`${sidebarStyles.optionButton} ${
-                            showFeedback && isSelected && isCorrect
-                              ? sidebarStyles.optionCorrect
-                              : showFeedback && isSelected && !isCorrect
-                                ? sidebarStyles.optionIncorrect
-                                : showFeedback && isCorrect
-                                  ? sidebarStyles.optionCorrect
-                                  : sidebarStyles.optionNormal
-                          }`}
-                        >
-                          <div className={sidebarStyles.optionContent}>
-                            {showFeedback && (isSelected || isCorrect) ? (
-                              isCorrect ? (
-                                <CheckCircle
-                                  size={20}
-                                  className={sidebarStyles.optionIconCorrect}
-                                />
-                              ) : (
-                                <XCircle
-                                  size={20}
-                                  className={sidebarStyles.optionIconIncorrect}
-                                />
-                              )
-                            ) : (
-                              <div className={sidebarStyles.optionIconEmpty} />
-                            )}
-                            <span className={sidebarStyles.optionText}>
-                              {option}
-                            </span>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+              <div style={{ marginBottom: "24px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "16px",
+                    flexWrap: "wrap",
+                    gap: "16px",
+                  }}
+                >
+                  <h1 style={{ fontSize: "20px", fontWeight: "bold" }}>
+                    {technologies.find((t) => t.id === selectedTech)?.name} -{" "}
+                    {selectedLevel.charAt(0).toUpperCase() +
+                      selectedLevel.slice(1)}{" "}
+                    Level
+                  </h1>
+                  <span>
+                    Question {currentQuestion + 1} of {questions.length}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    height: "8px",
+                    backgroundColor: "#e5e7eb",
+                    borderRadius: "4px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${((currentQuestion + 1) / questions.length) * 100}%`,
+                      height: "100%",
+                      backgroundColor: "#4f46e5",
+                    }}
+                  ></div>
                 </div>
               </div>
-            ) : (
-              <div className={sidebarStyles.loadingContainer}>
-                <div className={sidebarStyles.loadingContent}>
-                  <div className={sidebarStyles.loadingSpinner} />
-                  <h3 className={sidebarStyles.loadingTitle}>
-                    Preparing Your Quiz
-                  </h3>
-                  <p className={sidebarStyles.loadingDescription}>
-                    Loading questions...
-                  </p>
+
+              <div
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "16px",
+                  padding: "24px",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                }}
+              >
+                <div
+                  style={{ display: "flex", gap: "12px", marginBottom: "24px" }}
+                >
+                  <Target size={20} style={{ color: "#4f46e5" }} />
+                  <h2 style={{ fontSize: "18px", fontWeight: "500" }}>
+                    {currentQ.question}
+                  </h2>
+                </div>
+
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "12px",
+                  }}
+                >
+                  {currentQ.options.map((option, index) => {
+                    const isSelected = userAnswers[currentQuestion] === index;
+                    const isCorrect = index === currentQ.correctAnswer;
+                    const showFeedback =
+                      userAnswers[currentQuestion] !== undefined;
+                    let buttonStyle = {
+                      padding: "12px",
+                      borderRadius: "8px",
+                      border: "1px solid #e5e7eb",
+                      backgroundColor: "white",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                    };
+                    if (showFeedback && isSelected && isCorrect)
+                      buttonStyle = {
+                        ...buttonStyle,
+                        backgroundColor: "#dcfce7",
+                        borderColor: "#22c55e",
+                      };
+                    else if (showFeedback && isSelected && !isCorrect)
+                      buttonStyle = {
+                        ...buttonStyle,
+                        backgroundColor: "#fee2e2",
+                        borderColor: "#ef4444",
+                      };
+                    else if (showFeedback && isCorrect)
+                      buttonStyle = {
+                        ...buttonStyle,
+                        backgroundColor: "#dcfce7",
+                        borderColor: "#22c55e",
+                      };
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          if (userAnswers[currentQuestion] === undefined)
+                            handleAnswerSelect(index);
+                        }}
+                        style={buttonStyle}
+                      >
+                        {showFeedback && (isSelected || isCorrect) ? (
+                          isCorrect ? (
+                            <CheckCircle
+                              size={20}
+                              style={{ color: "#22c55e" }}
+                            />
+                          ) : (
+                            <XCircle size={20} style={{ color: "#ef4444" }} />
+                          )
+                        ) : (
+                          <div style={{ width: "20px" }} />
+                        )}
+                        <span>{option}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-            )}
-          </div>
-        </main>
-      </div>
-
-      <style>{sidebarStyles.customStyles}</style>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", marginTop: "100px" }}>
+              <div>Loading...</div>
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
