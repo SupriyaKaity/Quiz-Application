@@ -1145,46 +1145,6 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
               <div className={sidebarStyles.quizContainer}>
                 {isMobile ? (
                   <>
-                    <div className="fixed right-4 top-[5.1rem] z-50">
-                      <div className="relative h-14 w-14">
-                        <svg className="h-full w-full -rotate-90">
-                          <circle
-                            cx="32"
-                            cy="32"
-                            r="28"
-                            stroke="#e5e7eb"
-                            strokeWidth="5"
-                            fill="none"
-                          />
-                          <circle
-                            cx="32"
-                            cy="32"
-                            r="28"
-                            stroke={
-                              timeLeft <= 5
-                                ? "#ef4444"
-                                : timeLeft <= 10
-                                  ? "#f97316"
-                                  : "#22c55e"
-                            }
-                            strokeWidth="5"
-                            fill="none"
-                            strokeDasharray={`${(timeLeft / 15) * 175.9} 175.9`}
-                            strokeLinecap="round"
-                            className="transition-all duration-1000"
-                          />
-                        </svg>
-                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span
-                            className={`text-lg font-bold ${timeLeft <= 5 ? "text-red-500" : timeLeft <= 10 ? "text-orange-500" : "text-green-500"}`}
-                          >
-                            {timeLeft}
-                          </span>
-                          <span className="text-[8px] text-gray-400">sec</span>
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2">
                       <button
                         onClick={exitExam}
@@ -1246,7 +1206,48 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
                 )}
 
                 {/* Rest of your quiz content */}
-                <div className={sidebarStyles.quizHeader}>
+                <div className={`${sidebarStyles.quizHeader} ${isMobile ? "relative pr-24" : ""}`}>
+                  {isMobile && (
+                    <div className="absolute right-4 top-4 z-10">
+                      <div className="relative h-14 w-14">
+                        <svg className="h-full w-full -rotate-90">
+                          <circle
+                            cx="32"
+                            cy="32"
+                            r="28"
+                            stroke="#e5e7eb"
+                            strokeWidth="5"
+                            fill="none"
+                          />
+                          <circle
+                            cx="32"
+                            cy="32"
+                            r="28"
+                            stroke={
+                              timeLeft <= 5
+                                ? "#ef4444"
+                                : timeLeft <= 10
+                                  ? "#f97316"
+                                  : "#22c55e"
+                            }
+                            strokeWidth="5"
+                            fill="none"
+                            strokeDasharray={`${(timeLeft / 15) * 175.9} 175.9`}
+                            strokeLinecap="round"
+                            className="transition-all duration-1000"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span
+                            className={`text-lg font-bold ${timeLeft <= 5 ? "text-red-500" : timeLeft <= 10 ? "text-orange-500" : "text-green-500"}`}
+                          >
+                            {timeLeft}
+                          </span>
+                          <span className="text-[8px] text-gray-400">sec</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className={sidebarStyles.quizTitleContainer}>
                     <h1 className={sidebarStyles.quizTitle}>
                       {selectedTechnology.name} -{" "}

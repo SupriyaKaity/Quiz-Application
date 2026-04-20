@@ -357,11 +357,11 @@ export const sidebarStyles = {
   // Welcome screen
 
   welcomeContainer:
-    "flex min-h-0 items-start justify-center overflow-hidden px-2 pb-1 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex min-h-0 items-start justify-center overflow-hidden px-2 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //welcomeContainer: "flex items-center justify-center p-4 pb-32",
 
   welcomeContent:
-    "mx-auto w-full max-w-2xl rounded-2xl border border-white bg-white/90 p-2.5 text-center shadow-lg backdrop-blur-sm md:p-6",
+    "mx-auto mb-16 w-full max-w-2xl rounded-2xl border border-white bg-white/90 p-2.5 text-center shadow-lg backdrop-blur-sm md:mb-0 md:p-6",
 
   welcomeIcon:
     "inline-flex items-center justify-center p-3 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full shadow mb-4",
@@ -404,11 +404,11 @@ export const sidebarStyles = {
   // Results screen
 
   resultsContainer:
-    "flex h-auto min-h-0 items-start justify-center px-2 pb-1 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex h-auto min-h-0 items-start justify-center px-2 pb-4 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //resultsContainer: "flex items-center justify-center p-4 pb-32",
 
   resultsContent:
-    "w-full max-w-2xl rounded-2xl border border-gray-100 bg-white p-2.5 shadow-lg md:p-6 ",
+    "mb-16 w-full max-w-2xl rounded-2xl border border-gray-100 bg-white p-2.5 shadow-lg md:mb-0 md:p-6 ",
 
   resultsHeader: "text-center",
   performanceIcon: "p-3 rounded-2xl inline-flex mb-3 shadow-sm",
