@@ -336,11 +336,11 @@ export const sidebarStyles = {
 
   // Mobile header
   mobileHeader:
-    "sticky top-0 z-30 mb-1 flex items-center gap-3 border-b border-slate-200/80 bg-slate-50/95 px-1 py-2 backdrop-blur md:hidden",
+    "sticky top-0 z-30 mb-0.5 flex items-center gap-2 border-b border-slate-200/80 bg-slate-50/95 px-1 py-1.5 backdrop-blur md:hidden",
   menuButton:
     "flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-white shadow-sm",
   mobileTitle:
-    "flex-1 min-w-0 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 shadow-sm",
+    "flex-1 min-w-0 rounded-2xl border border-indigo-100 bg-gradient-to-r from-blue-50 to-indigo-50 px-3 py-2 shadow-sm",
   mobileTechInfo: "flex items-center font-[pacifico] justify-start space-x-3",
   mobileTechIcon: "p-2 rounded-md border",
   mobileTechText: "min-w-0 text-left",
@@ -357,24 +357,24 @@ export const sidebarStyles = {
   // Welcome screen
 
   welcomeContainer:
-    "flex min-h-0 items-start justify-center overflow-hidden px-3 pb-2 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex min-h-0 items-start justify-center overflow-hidden px-2 pb-1 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //welcomeContainer: "flex items-center justify-center p-4 pb-32",
 
   welcomeContent:
-    "mx-auto w-full max-w-2xl rounded-2xl border border-white bg-white/90 p-3 text-center shadow-lg backdrop-blur-sm md:p-6",
+    "mx-auto w-full max-w-2xl rounded-2xl border border-white bg-white/90 p-2.5 text-center shadow-lg backdrop-blur-sm md:p-6",
 
   welcomeIcon:
     "inline-flex items-center justify-center p-3 bg-gradient-to-r from-blue-200 to-indigo-200 rounded-full shadow mb-4",
   welcomeTitle:
     "text-xl md:text-3xl font-bold text-slate-800 mb-2 font-[pacifico]",
   welcomeDescription:
-    "mx-auto mb-4 max-w-md text-sm text-slate-700 md:mb-6 md:text-lg",
+    "mx-auto mb-3 max-w-md text-sm text-slate-700 md:mb-6 md:text-lg",
 
   // Features grid
   featuresGrid:
-    "mb-4 grid grid-cols-1 gap-3 md:mb-6 md:grid-cols-2 md:gap-6 lg:grid-cols-3",
+    "mb-3 grid grid-cols-1 gap-2.5 md:mb-6 md:grid-cols-2 md:gap-6 lg:grid-cols-3",
   featureCard:
-    "bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-5 rounded-2xl border border-blue-100 text-center",
+    "bg-gradient-to-br from-blue-50 to-indigo-50 p-3 md:p-5 rounded-2xl border border-blue-100 text-center",
   featureIcon:
     "inline-flex items-center justify-center p-3 bg-green-100 text-green-600 rounded-full mb-3",
   featureTitle: "font-semibold text-slate-800 mb-2",
@@ -382,7 +382,7 @@ export const sidebarStyles = {
 
   // Welcome prompt
   welcomePrompt:
-    "bg-gradient-to-r from-blue-100 to-indigo-100 p-3 md:p-4 rounded-2xl border border-blue-200 shadow-inner",
+    "bg-gradient-to-r from-blue-100 to-indigo-100 p-2.5 md:p-4 rounded-2xl border border-blue-200 shadow-inner",
   welcomePromptText:
     "text-blue-700 font-medium flex items-center justify-center",
 
@@ -404,11 +404,11 @@ export const sidebarStyles = {
   // Results screen
 
   resultsContainer:
-    "flex h-auto min-h-0 items-start justify-center px-3 pb-2 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
+    "flex h-auto min-h-0 items-start justify-center px-2 pb-1 pt-0 md:min-h-[calc(100vh-200px)] md:items-center md:p-4",
   //resultsContainer: "flex items-center justify-center p-4 pb-32",
 
   resultsContent:
-    "w-full max-w-2xl rounded-2xl border border-gray-100 bg-white p-3 shadow-lg md:p-6 ",
+    "w-full max-w-2xl rounded-2xl border border-gray-100 bg-white p-2.5 shadow-lg md:p-6 ",
 
   resultsHeader: "text-center",
   performanceIcon: "p-3 rounded-2xl inline-flex mb-3 shadow-sm",
@@ -416,12 +416,12 @@ export const sidebarStyles = {
     "text-xl md:text-2xl font-bold text-slate-800 mb-1 font-[pacifico]",
   resultsSubtitle: "text-slate-600 mb-2",
   performanceBadge:
-    "inline-block text-slate-800 px-4 py-1 rounded-full text-sm font-medium mb-6",
+    "mb-4 inline-block rounded-full px-4 py-1 text-sm font-medium text-slate-800 md:mb-6",
 
   // Score grid
-  scoreGrid: "mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2",
+  scoreGrid: "mb-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:mb-6 md:gap-4",
   scoreCard:
-    "bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-2xl border border-green-200 text-center",
+    "bg-gradient-to-br from-green-50 to-emerald-50 p-3 rounded-2xl border border-green-200 text-center md:p-4",
   scoreIcon:
     "inline-flex items-center justify-center w-12 h-12 bg-green-100 text-green-600 rounded-full mb-3 shadow-inner",
   scoreNumber: "text-2xl font-bold text-green-600",
@@ -429,7 +429,7 @@ export const sidebarStyles = {
 
   // Score progress
   scoreProgress:
-    "bg-gradient-to-r from-indigo-50 to-blue-50 p-4 rounded-2xl border border-indigo-200 mb-6",
+    "mb-4 rounded-2xl border border-indigo-200 bg-gradient-to-r from-indigo-50 to-blue-50 p-3 md:mb-6 md:p-4",
   scoreProgressHeader: "flex items-center justify-between mb-4",
   scoreProgressTitle: "text-indigo-700 font-semibold",
   scoreProgressPercentage: "text-indigo-700 font-bold",

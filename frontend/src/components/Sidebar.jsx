@@ -1145,8 +1145,8 @@ const Sidebar = ({ onExamStart, onExamEnd }) => {
               <div className={sidebarStyles.quizContainer}>
                 {isMobile ? (
                   <>
-                    <div className="fixed top-[4.25rem] right-4 z-50">
-                      <div className="relative h-16 w-16">
+                    <div className="fixed right-4 top-[5.1rem] z-50">
+                      <div className="relative h-14 w-14">
                         <svg className="h-full w-full -rotate-90">
                           <circle
                             cx="32"
